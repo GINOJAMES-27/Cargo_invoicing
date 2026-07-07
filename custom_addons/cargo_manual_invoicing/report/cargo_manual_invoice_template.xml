@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_cargo_invoice_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="article o_report_no_header"
+                     style="margin: 0; padding: 6px 12px; font-family: 'Segoe UI', Arial, sans-serif; font-size: 10.5px; color: #1a1a1a;">
+                    <t t-call="cargo_manual_invoicing.report_cargo_invoice_content"/>
+                </div>
+                <div style="page-break-after: always;" t-if="not doc_last"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_cargo_invoice_content">
+        <style>
+            .ci-header {
+                border-bottom: 3px solid #000;
+                padding-bottom: 10px;
+                margin-bottom: 0;
+            }
+            .ci-header .en-block {
+                font-size: 12.5px;
+                line-height: 1.5;
+                color: #222;
+            }
+            .ci-header .en-block .company-name {
+                font-size: 18px;
+                font-weight: 800;
+                color: #000;
+                letter-spacing: 0.5px;
+                margin-bottom: 3px;
+            }
+            .ci-header .ar-block {
+                direction: rtl;
+                text-align: right;
+                font-size: 13.5px;
+                line-height: 1.5;
+                color: #222;
+            }
+            .ci-header .ar-block .company-name-ar {
+                font-size: 21px;
+                font-weight: 800;
+                color: #000;
+                margin-bottom: 3px;
+            }
+            .ci-header .detail-label {
+                color: #555;
+                font-weight: 700;
+                font-size: 11.5px;
+            }
+
+            /* Meta row */
+            .ci-meta {
+                background: #000;
+                color: #fff;
+                margin-top: 12px;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            .ci-meta td {
+                padding: 5px 8px !important;
+                border: 1px solid #222 !important;
+            }
+            .ci-meta .meta-label {
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #aaa;
+                margin-bottom: 1px;
+                display: block;
+            }
+            .ci-meta .meta-value {
+                font-size: 12px;
+                font-weight: 800;
+                color: #fff;
+                display: block;
+                margin-top: 1px;
+            }
+
+            /* Section headers */
+            .ci-section-header {
+                background: #111;
+                border: 1px solid #111;
+                padding: 5px 9px;
+                font-weight: 700;
+                font-size: 11.5px;
+                color: #fff;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            /* Data tables */
+            .ci-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 8px;
+            }
+            .ci-table td {
+                border: 1px solid #ccc;
+                padding: 4px 7px;
+                vertical-align: middle;
+                font-size: 11.5px;
+            }
+            .ci-table .lbl {
+                font-weight: 700;
+                color: #111;
+                background: #f9f9f9;
+                width: 13%;
+                white-space: nowrap;
+                font-size: 10.5px;
+            }
+            .ci-table .val {
+                width: 37%;
+                color: #000;
+                font-weight: 600;
+            }
+
+            /* Financial section */
+            .ci-fin-label {
+                font-weight: 700;
+                color: #222;
+                font-size: 11.5px;
+            }
+            .ci-fin-label-ar {
+                font-weight: 600;
+                color: #666;
+                font-size: 10.5px;
+                direction: rtl;
+            }
+            .ci-fin-value {
+                text-align: right;
+                font-weight: 800;
+                font-size: 13px;
+                color: #000;
+                width: 100px;
+            }
+            .ci-gross-cell {
+                background: #000 !important;
+                color: #fff !important;
+                font-size: 13px !important;
+                font-weight: 800 !important;
+                padding: 7px !important;
+                border-color: #000 !important;
+            }
+            .ci-gross-cell .ci-fin-label {
+                color: #fff !important;
+            }
+            .ci-gross-cell .ci-fin-label-ar {
+                color: #ccc !important;
+            }
+            .ci-gross-cell .lbl {
+                color: #fff !important;
+                background: #000 !important;
+            }
+
+            /* Terms */
+            .ci-terms {
+                direction: rtl;
+                text-align: right;
+                font-size: 9.5px;
+                line-height: 1.45;
+                color: #333;
+                margin-top: 15px;
+                border-top: 2px solid #000;
+                padding-top: 10px;
+            }
+            .ci-terms strong {
+                color: #000;
+                font-size: 10.5px;
+            }
+            .ci-terms-en {
+                font-size: 9.5px;
+                line-height: 1.3;
+                color: #444;
+                margin-top: 7px;
+                padding-top: 7px;
+                border-top: 1px solid #ccc;
+            }
+
+            /* Signature area */
+            .ci-sign-box {
+                border: 2px solid #000;
+                border-radius: 4px;
+                text-align: center;
+                padding: 15px 10px 6px 10px;
+                font-weight: 700;
+                font-size: 11px;
+                color: #222;
+                min-height: 55px;
+                background: #fdfdfd;
+            }
+        </style>
+
+        <div>
+
+            <!-- ═══ HEADER ═══ -->
+            <div class="row ci-header">
+                <div class="col-5 en-block">
+                    <div class="company-name">Retex Cargo Express</div>
+                    <span class="detail-label">VAT NO:</span> 310248611400003<br/>
+                    <span class="detail-label">MOBILE:</span> 0558736359<br/>
+                    Riyadh-Al Aziziyah-<br/>
+                    Abu Saad Al-Wazir Street-Near Saptco Bus Stand<br/>
+                    Saudi Arabia Riyadh
+                </div>
+
+                <div class="col-2"></div>
+
+                <div class="col-5 ar-block">
+                    <div class="company-name-ar">مؤسسة قافلة السرعة للشحن</div>
+                    الرقم الضريبي : ٣١٠٢٤٨٦١١٤٠٠٠٠٣<br/>
+                    جوال : ٠٥٥٨٧٣٦٣٥٩<br/>
+                    الرياض - العزيزية<br/>
+                    شارع أبو سعد الوزير - بجوار موقف سابتكو<br/>
+                    المملكة العربية السعودية - الرياض
+                </div>
+            </div>
+
+            <!-- ═══ META ROW ═══ -->
+            <table class="ci-table ci-meta">
+                <tr>
+                    <td style="width:25%;">
+                        <span class="meta-label">Invoice No</span>
+                        <span class="meta-value"><t t-esc="doc.invoice_number"/></span>
+                    </td>
+                    <td style="width:25%;">
+                        <span class="meta-label">Shipping Date</span>
+                        <span class="meta-value">
+                            <t t-esc="doc.shipping_date" t-options='{"widget": "datetime", "format": "d/M/yyyy hh:mm a"}'/>
+                        </span>
+                    </td>
+                    <td style="width:25%;">
+                        <span class="meta-label">Shipment Type</span>
+                        <span class="meta-value" style="text-transform:uppercase;">
+                            <t t-esc="dict(doc._fields['shipment_type'].selection).get(doc.shipment_type, '')"/>
+                        </span>
+                    </td>
+                    <td style="width:25%;">
+                        <span class="meta-label">Status</span>
+                        <span class="meta-value"><t t-esc="doc.status"/></span>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- ═══ SHIPPER | RECEIVER ═══ -->
+            <table class="ci-table" style="margin-top: 8px;">
+                <tr>
+                    <td colspan="2" class="ci-section-header">
+                        Shipper Info
+                        <span style="float:right; direction:rtl;">معلومات الشاحن</span>
+                    </td>
+                    <td colspan="2" class="ci-section-header">
+                        Receiver Info
+                        <span style="float:right; direction:rtl;">معلومات استقبال</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">Origin:</td>
+                    <td class="val"><t t-esc="doc.origin"/></td>
+                    <td class="lbl">Destination:</td>
+                    <td class="val"><t t-esc="doc.destination_country_id.name"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Name:</td>
+                    <td class="val"><t t-esc="doc.shipper_name"/></td>
+                    <td class="lbl">Name:</td>
+                    <td class="val"><t t-esc="doc.receiver_name"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Mobile:</td>
+                    <td class="val"><t t-esc="doc.shipper_mobile"/></td>
+                    <td class="lbl">Mobile:</td>
+                    <td class="val"><t t-esc="doc.receiver_mobile"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Tel:</td>
+                    <td class="val"><t t-esc="doc.shipper_tel"/></td>
+                    <td class="lbl">Tel:</td>
+                    <td class="val"><t t-esc="doc.receiver_tel"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">VAT No:</td>
+                    <td class="val"><t t-esc="doc.shipper_vat_no"/></td>
+                    <td class="lbl" colspan="2" style="border:none; background:none;"></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Company:</td>
+                    <td class="val"><t t-esc="doc.shipper_company"/></td>
+                    <td class="lbl">Company:</td>
+                    <td class="val"><t t-esc="doc.receiver_company"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Email:</td>
+                    <td class="val"><t t-esc="doc.shipper_email"/></td>
+                    <td class="lbl">Email:</td>
+                    <td class="val"><t t-esc="doc.receiver_email"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Address:</td>
+                    <td class="val"><t t-esc="doc.shipper_address"/></td>
+                    <td class="lbl">Address:</td>
+                    <td class="val"><t t-esc="doc.receiver_address"/></td>
+                </tr>
+            </table>
+
+            <!-- ═══ ITEM DETAILS | FINANCIALS ═══ -->
+            <table class="ci-table" style="margin-top: 8px;">
+                <tr>
+                    <td colspan="2" class="ci-section-header">
+                        Item Details
+                        <span style="float:right; direction:rtl;">معلومات الشحن</span>
+                    </td>
+                    <td colspan="2" class="ci-section-header" style="text-align:center;">
+                        Invoice Details
+                        <span style="direction:rtl;"> :تفاصيل الفاتورة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">Weight:</td>
+                    <td class="val"><t t-esc="doc.weight"/></td>
+                    <td>
+                        <span class="ci-fin-label">Net Amount</span>
+                        <span class="ci-fin-label-ar" style="float:right;">المجموع الفرعي</span>
+                    </td>
+                    <td class="ci-fin-value"><t t-esc="'%.2f' % doc.net_amount"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Pieces:</td>
+                    <td class="val"><t t-esc="doc.pieces"/></td>
+                    <td>
+                        <span class="ci-fin-label">VAT 15%</span>
+                        <span class="ci-fin-label-ar" style="float:right;">ضريبة</span>
+                    </td>
+                    <td class="ci-fin-value"><t t-esc="'%.2f' % doc.vat_amount"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Carrier:</td>
+                    <td class="val"><t t-esc="doc.carrier"/></td>
+                    <td>
+                        <span class="ci-fin-label">Extra Charge</span>
+                        <span class="ci-fin-label-ar" style="float:right;">رسوم إضافية</span>
+                    </td>
+                    <td class="ci-fin-value"><t t-esc="'%.2f' % doc.extra_charge"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Airway Bill:</td>
+                    <td><t t-esc="doc.airway_bill"/></td>
+                    <td class="ci-gross-cell">
+                        <span class="ci-fin-label">GROSS TOTAL</span>
+                        <span class="ci-fin-label-ar" style="float:right;">المجموع الكلي</span>
+                    </td>
+                    <td class="ci-fin-value ci-gross-cell">
+                        <t t-esc="'%.2f' % doc.gross_total"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">Product:</td>
+                    <td class="val"><t t-esc="doc.product_info"/></td>
+                    <td class="lbl">User:</td>
+                    <td class="val"><t t-esc="doc.agent_name"/></td>
+                </tr>
+                <tr>
+                    <td class="lbl">Special:</td>
+                    <td class="val"><t t-esc="doc.special_info"/></td>
+                    <td class="lbl">Paymode:</td>
+                    <td class="val" style="text-transform:capitalize;">
+                        <t t-if="doc.paymode" t-esc="dict(doc._fields['paymode'].selection).get(doc.paymode, '')"/>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- ═══ TERMS (Arabic) ═══ -->
+            <div class="ci-terms">
+                <strong style="font-size: 11px; text-decoration: underline;">شروط وتعليمات هامة</strong><br/>
+                ١) يجب أن تكون المنقولات سليمة وخالية من المواد الخطرة والمحظور تداولها نظاميا كما يجب أن تكون محكمة الإغلاق و معلفة بطريقة جيدة تسمح بالنقل والمناولة ويتحمل المرسل وحده المسؤلية خلاف ذلك<br/>
+                ٢) يلتزم المكتب فقط بنقل المنقولات المسموح بها قانونيا و الرسائل البريدية<br/>
+                ٣) يقوم المرسل بملئ كافية البيانات المدونة والتأكد من صحة العناوين والمكتب غير مسؤل عن تأخر أو تلف أو فقد الناتج من مخالفة المرسل لذلك<br/>
+                ٤) المكتب مفوض من قبل المرسل في فتح المنقولات أو الاشياء المرسلة بعد استلامها في حالة طلب السلطات المختصة ذلك<br/>
+                <br/>
+                <strong style="text-decoration: underline;">الالتزامات و المسؤليات :</strong><br/>
+                يقوم المكتب بتعويض المرسل مالك المنقولات في حالة الفقد أو التلف الكلي الناتج عن خطأ الشركة الناقلة بشروط وهي :<br/>
+                أ) أن يقوم المرسل بدفع التأمين الخاص بالشحنة<br/>
+                ب) أن تكون المنقولات معلفة بطريقة نموذجية وجيدة<br/>
+                ت) ان لا يستلم المستلم المنقولات وابلاغ المكتب بهذا في حالة وجود أي تلف والمكتب يقوم بالاجراءات اللازمة يعفي المكتب من المسؤلية الكاملة<br/>
+                في الحالات الاتية :<br/>
+                ١) استلام المرسل الية المنقولات المرسلة والتوقيع على ذلك بالاستلام<br/>
+                ٢) تأخير المستلم في استلام المنقولات بمدة تزيد عن اسبوع واحد من تاريخ الوصول<br/>
+                ٣) الفقد أو التلف عن طريق خطأ المرسل<br/>
+                ٤) الفقد أو التأخير أو التلف الخارج عن ادارة المكتب كالقوة القاهرة<br/>
+                ٥) يعفي المكتب من رسوم الجمركية أو الحجز المنقولات الدولية المرسلة الى جميع الدول على حسب اختلاف نظام الجمارك في كل دولة<br/>
+                <br/>
+                <strong style="text-decoration: underline;">المواد الممنوع نقلها:</strong><br/>
+                ١- المخدرات والمسكرات  ٢- المفرقعات والأسلحة النارية بجميع انواعها  ٣- المطبوعات والمواد الممنوعة التي تتنافي مع التقاليد والأخلاق والآداب العامة والنظم والقوانين السعودية<br/>
+                ٤- المواد الثمينة كالتحف والمجوهرات والبطاقات مسبقة الدفع والبطاريات السائلة  ٥- اسطوانات الغاز  ٦- السوائل كالماء والعسل وجميع الاعراض التي تحتوي على سوائل<br/>
+                <br/>
+                عند استلام العميل شحنته والتوقيع على استلام تنتهي مهمة المكتب وسلطاته من ناحية شحنة العميل
+            </div>
+
+            <!-- English T&C -->
+            <div class="ci-terms-en">
+                تحتاج أي اوراق أو مستندات للتخليس الجمركي على المستلم توفيرها كل الرسوم و الضرائب يجب أن تدفع من قبل المرسل أو المستلم دون أدني مسؤلية على الشركة وفي حالة
+                عدم استلام الشحنة من قبل المستلم خلال ١٠ أيام داخليا و ٣٠ يوما خارجيا يجب تبليغ المكتب بذلك وفي حالة عدم للتبليغ المكتب غير مسؤل عن هذه الشحنات<br/>
+                <span style="direction: ltr; text-align: left; display: block; margin-top: 2px;">
+                    Need any documents to clear the shipment from customs receiver should provide all duties and taxes should pay receiver or shipper, if you will not receive
+                    the domestic within 10 days you should inform otherwise company will not any responsibilities
+                </span>
+            </div>
+
+            <!-- ═══ QR CODE + SIGNATURES ═══ -->
+            <div class="row" style="margin-top: 5px; page-break-inside: avoid;">
+                <div class="col-4 text-center">
+                    <div class="ci-sign-box">Sign or Name</div>
+                </div>
+                <div class="col-4 text-center">
+                    <t t-if="doc.zatca_qr_image">
+                        <img t-att-src="image_data_uri(doc.zatca_qr_image)" style="image-rendering: pixelated; margin-bottom: 2px; max-height: 90px;" alt="ZATCA QR Code"/>
+                        <div style="font-size: 9px; font-weight: bold; margin-top: 2px;">ZATCA Compliant</div>
+                    </t>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="ci-sign-box">Thumb Sign</div>
+                </div>
+            </div>
+
+        </div>
+    </template>
+
+</odoo>

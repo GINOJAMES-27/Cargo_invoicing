@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Top-level App Menu -->
+    <menuitem id="menu_cargo_invoicing_root"
+              name="Cargo Invoicing"
+              web_icon="cargo_manual_invoicing,static/description/icon.png"
+              sequence="90"/>
+
+    <!-- ── Operations ── -->
+    <menuitem id="menu_cargo_invoicing_main"
+              name="Operations"
+              parent="menu_cargo_invoicing_root"
+              sequence="10"/>
+
+    <menuitem id="menu_cargo_manual_invoice"
+              name="Cargo Invoices"
+              parent="menu_cargo_invoicing_main"
+              action="action_cargo_manual_invoice"
+              sequence="10"/>
+
+    <!-- ── Reporting ── -->
+    <menuitem id="menu_cargo_reporting"
+              name="Reporting"
+              parent="menu_cargo_invoicing_root"
+              sequence="20"/>
+
+    <menuitem id="menu_daily_collection_report"
+              name="Daily Collection Report"
+              parent="menu_cargo_reporting"
+              action="action_cargo_daily_report_wizard"
+              sequence="30"/>
+
+    <menuitem id="menu_daily_collection_report_main"
+              name="Daily Collection Report"
+              parent="menu_cargo_invoicing_main"
+              action="action_cargo_daily_report_wizard"
+              sequence="20"/>
+
+    <menuitem id="menu_cargo_invoice_graph"
+              name="Invoice Analysis (Chart)"
+              parent="menu_cargo_reporting"
+              action="action_cargo_invoice_report_graph"
+              sequence="10"/>
+
+    <menuitem id="menu_cargo_invoice_pivot"
+              name="Invoice Analysis (Table)"
+              parent="menu_cargo_reporting"
+              action="action_cargo_invoice_report_pivot"
+              sequence="20"/>
+
+
+
+</odoo>
