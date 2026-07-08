@@ -2,8 +2,9 @@ FROM odoo:18.0
 
 USER root
 
-# Install system utilities and nodejs for rtlcss (Arabic PDF alignment)
-RUN apt-get update && apt-get install -y npm git && \
+# Install system utilities, nodejs for rtlcss, and core graphics engines for PDF/HTML borders
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    npm git fontconfig xfonts-base xfonts-75dpi libxrender1 libxext6 libfontconfig1 && \
     npm install -g rtlcss && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
