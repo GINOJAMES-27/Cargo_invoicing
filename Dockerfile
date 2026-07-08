@@ -2,9 +2,8 @@ FROM odoo:18.0
 
 USER root
 
-# Install system utilities, nodejs for rtlcss, and core graphics engines for PDF/HTML borders
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    npm git fontconfig xfonts-base xfonts-75dpi libxrender1 libxext6 libfontconfig1 && \
+# Install system utilities and nodejs for rtlcss (Arabic PDF alignment)
+RUN apt-get update && apt-get install -y npm git && \
     npm install -g rtlcss && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -20,5 +19,5 @@ RUN chown -R odoo:odoo /var/lib/odoo/custom_addons
 
 USER odoo
 
-# Dynamically inject Render Environment Variables into Odoo on startup
-CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --proxy-mode --db_host=$DB_HOST --db_user=$DB_USER --db_password=$DB_PASSWORD --db_port=$DB_PORT -d $DB_NAME -i base --pg_path='/usr/bin' ?sslmode=require"]
+# Boot command to initialize your brand-new database cleanly
+CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --proxy-mode --db_host=$DB_HOST --db_user=$DB_USER --db_password=$DB_PASSWORD --db_port=$DB_PORT -d $DB_NAME -i base"]
