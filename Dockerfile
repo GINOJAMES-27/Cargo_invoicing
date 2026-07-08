@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y npm git && \
 
 # Install your custom module dependencies
 COPY requirements.txt /opt/requirements.txt
-RUN pip3 install --no-cache-dir -r /opt/requirements.txt
+RUN pip3 install --no-cache-dir --break-system-packages -r /opt/requirements.txt
 
 # Sync your configuration and modules code
 COPY odoo.conf /etc/odoo/odoo.conf
