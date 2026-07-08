@@ -15,9 +15,10 @@ RUN pip3 install --no-cache-dir --break-system-packages --ignore-installed -r /o
 COPY odoo.conf /etc/odoo/odoo.conf
 COPY ./custom_addons /var/lib/odoo/custom_addons
 
-RUN chown -R odoo:odoo /var/lib/odoo/custom_addons
+# FIX: Give the odoo user full control over the entire data storage directory
+RUN chown -R odoo:odoo /var/lib/odoo
 
 USER odoo
 
-# Boot command to initialize your brand-new database cleanly
+# Boot command to run your database
 CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf -i base"]
