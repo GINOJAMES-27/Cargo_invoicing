@@ -20,5 +20,5 @@ RUN chown -R odoo:odoo /var/lib/odoo
 
 USER odoo
 
-# Boot command using your hardcoded odoo.conf parameters and handling missing asset generation on-the-fly
-CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --dev=xml"]
+# Boot command forcing Odoo to bypass compiled asset maps and serve layouts raw
+CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --proxy-mode --dev=assets"]
