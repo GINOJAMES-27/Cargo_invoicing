@@ -21,4 +21,4 @@ RUN chown -R odoo:odoo /var/lib/odoo/custom_addons
 USER odoo
 
 # Dynamically inject Render Environment Variables into Odoo on startup
-CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --proxy-mode --db_host=$DB_HOST --db_user=$DB_USER --db_password=$DB_PASSWORD --db_port=$DB_PORT -d $DB_NAME"]
+CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --proxy-mode --db_host=$DB_HOST --db_user=$DB_USER --db_password=$DB_PASSWORD --db_port=$DB_PORT -d $DB_NAME --dev=all"]
