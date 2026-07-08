@@ -20,4 +20,4 @@ RUN chown -R odoo:odoo /var/lib/odoo/custom_addons
 USER odoo
 
 # Boot command to initialize your brand-new database cleanly
-CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --proxy-mode --db_host=$DB_HOST --db_user=$DB_USER --db_password=$DB_PASSWORD --db_port=$DB_PORT -d $DB_NAME --db_user=$DB_USER -i base"]
+CMD ["sh", "-c", "odoo --config=/etc/odoo/odoo.conf --proxy-mode --db_host=$DB_HOST --db_user=$DB_USER --db_password=$DB_PASSWORD --db_port=$DB_PORT -d $DB_NAME -i base"]
