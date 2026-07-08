@@ -18,3 +18,6 @@ COPY ./custom_addons /var/lib/odoo/custom_addons
 RUN chown -R odoo:odoo /var/lib/odoo/custom_addons
 
 USER odoo
+
+# Dynamically inject Render Environment Variables into Odoo on startup
+CMD ["odoo", "--config=/etc/odoo/odoo.conf", "--db_host=$DB_HOST", "--db_user=$DB_USER", "--db_password=$DB_PASSWORD", "--db_port=$DB_PORT", "--db_name=$DB_NAME"]
